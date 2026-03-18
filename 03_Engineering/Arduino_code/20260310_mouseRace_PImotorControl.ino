@@ -153,6 +153,23 @@ void setMotorSpeeds(int leftPWM, int rightPWM) {
   leftPWM  = constrain(leftPWM, PWM_MIN, PWM_MAX);
   rightPWM = constrain(rightPWM, PWM_MIN, PWM_MAX);
 
+//------------Calibration Function for Sensors---------------//
+int sensorOffsetL = 0;
+int sensorOffsetR = 0;
+
+void calibrateSensors() {
+  for (int i = 0; i < 100; i++) {
+    sensorOffsetL += analogRead(PUCL_PIN);
+    sensorOffsetR += analogRead(PUCR_PIN);
+  }
+  sensorOffsetL /= 100;
+  sensorOffsetR /= 100;
+}
+
   analogWrite(MOTOR_L_PIN, leftPWM);
   analogWrite(MOTOR_R_PIN, rightPWM);
 }
+
+//----------Serial Debug Output----------//
+Serial.print("Error: "); Serial.print(currentError);
+Serial.print(" PI: "); Serial.println(pwmValPI);
